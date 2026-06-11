@@ -16,11 +16,11 @@
     apt:
       name: "linux-image-{{ ubuntu_22_amd64_kernel }}"
       state: present
-  - name: reboot os
-    reboot:
-      reboot_timeout: 600
-      connect_timeout: 30
-      test_command: uptime
+  # - name: reboot os
+  #   reboot:
+  #     reboot_timeout: 600
+  #     connect_timeout: 30
+  #     test_command: uptime
   when:
   - os == 'ubuntu'
   - osv == '22.04'
@@ -33,3 +33,9 @@
     state: latest
     update_cache: yes
   when: os == 'kylin'
+
+- name: reboot os
+  reboot:
+    reboot_timeout: 900
+    connect_timeout: 60
+    test_command: uptime
