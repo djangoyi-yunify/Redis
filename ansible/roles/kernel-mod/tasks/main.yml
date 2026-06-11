@@ -1,0 +1,33 @@
+---
+- name: set vars
+  set_fact:
+    os: "{{ os | d(default_os) }}"
+    osv: "{{ osv | d(default_osv) }}"
+
+- name: appcenter disable modules
+  copy:
+    dest: /etc/modprobe.d/appcenter-disable-modules.conf
+    content: |
+      install algif_aead /bin/false
+      install esp4 /bin/false
+      install esp6 /bin/false
+      install rxrpc /bin/false
+
+- name: appcenter disable modules for ubuntu 22
+  blockinfile:
+    path: /etc/modprobe.d/blacklist.conf
+    create: yes
+    block: |
+      blacklist virtio_rng
+  when:
+  - os == 'ubuntu'
+  - osv == '22.04'
+
+- name: update-initramfs(for kylin)
+  command: dracut -f
+  when: os == 'kylin'
+
+- name: update-initramfs(for ubuntu)
+  command: update-initramfs -u
+  when: os == 'ubuntu'
+  
