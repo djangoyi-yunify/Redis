@@ -493,7 +493,7 @@ runRedisCmd() {
 }
 
 checkVip() {
-  local vipResponse; vipResponse="$(runRedisCmd --ip $REDIS_VIP ROLE | sed -n '1{p;q}')"
+  local vipResponse; vipResponse="$(runRedisCmd --ip $REDIS_VIP ROLE | sed -n '1p')"
   [ "$vipResponse" == "master" ]
 }
 
